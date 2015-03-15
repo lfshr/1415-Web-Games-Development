@@ -217,3 +217,4 @@ pip-log.txt
 
 #Repo-Specific Ignores
 server/node_modules
+.idea/workspace.xml
