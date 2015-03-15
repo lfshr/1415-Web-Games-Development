@@ -1,10 +1,14 @@
 /**
  * Created by LiamF on 15/03/2015.
  */
-var app = require('express')();
+var app = require('express')(),
+    http = require('http').Server(app),
+    io = require('socket.io')(http);
 
-app.get('/', function(req, res){
-    res.send("Hello World");
+io.on('connection', function(socket){
+    console.log('user connected');
 });
 
-app.listen(3000);
+http.listen(3000, function(){
+    console.log("Listening on port 3000");
+});
