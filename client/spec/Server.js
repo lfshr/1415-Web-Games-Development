@@ -15,14 +15,36 @@ describe( "Server", function(){
     });
 
     describe("connect", function(){
-        beforeEach(function(){
-            server = new Server();
-        });
         it("to local server with no parameters", function(){
-            console.log(server);
             server.connect();
             expect(server.getIp()).toBeDefined();
             expect(server.isConnected()).toEqual(true);
         });
+
+        it("joins an IP and Port together", function(){
+            var port = server.joinUrlPort("http://127.0.0.1", 3000);
+            expect(port).toEqual("http://127.0.0.1:3000");
+        });
+    });
+
+    describe("Send Hello Receive World from server", function(){
+        var responded = false,
+            response;
+        beforeEach(function(done){
+            server.emit('test', 'hello', function(res){
+                responded = true;
+                response = res;
+                done();
+            });
+        });
+
+        it('responded', function(){
+            expect(responded).toEqual(true);
+        });
+
+        it('responded "world"', function(){
+            expect(response).toEqual('world');
+        });
     })
+
 });

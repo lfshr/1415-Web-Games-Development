@@ -7,6 +7,14 @@ var app = require('express')(),
 
 io.on('connection', function(socket){
     console.log('user connected');
+
+    socket.on('test', function(msg, callback){
+        console.log('hello received');
+        if(msg === 'hello'){
+            console.log('world responded');
+            callback('world');
+        }
+    });
 });
 
 http.listen(3000, function(){
