@@ -1,8 +1,10 @@
 # 1415-Web-Games-Development
 1415 Web Games Development Repository
 
+# Client
 The Client holds all the resources needed for a client to play.
 
+# Server
 The Server holds all the resources needed for the server to run.
 You'll need to install node.js on the server.
 After installing node.js you will have to run the command "npm install" to install the dependencies.
