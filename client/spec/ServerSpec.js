@@ -45,29 +45,6 @@ describe( "Server", function(){
         it('responded "world"', function(){
             expect(response).toEqual('world');
         });
-    });
-
-    describe("Drops host and gives host to another user", function(){
-        var server2;
-
-        beforeEach(function(done){
-            server2 = new Server();
-            server2.clientName = "server2";
-            server2.connect({
-                callback: function(){
-                    server.disconnect();
-                    setTimeout(function(){
-                        done();
-                    }, 500)
-                }
-            });
-        });
-
-
-        it("gives host to server 2", function(){
-            //server.disconnect();
-            expect(server2.isHost).toEqual(true);
-        })
-    });
+    })
 
 });
