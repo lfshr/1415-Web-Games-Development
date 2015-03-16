@@ -4,7 +4,8 @@
 
 describe("Main", function () {
 
-    it("Makes sure game is initialised", function () {
-        expect(_gameIsInitialised).toEqual(true);
-    });
+    it("Creates a WebAsteroids.Main class", function () {
+        var main = new WebAsteroids.Main();
+        expect(main).toBeDefined();
+    })
 });

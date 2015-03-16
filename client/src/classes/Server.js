@@ -20,9 +20,15 @@ Server.prototype.connect = function(ip){
     this._ip = ip || this._ip;
     // Connect the socket using io passing through the calculated IP
     this._socket = io.connect(this._ip);
-
+    this._socket.emit('handshake', {clientName: 'test'})
+    this._socket.emit('am i host', function (res) {
+        if (res = true) {
+            alert("I am host!");
+        }
+    })
     //TODO: add some kind of logic to catch connection errors
     this.connected = true;
+    return this.connected;
 };
 
 

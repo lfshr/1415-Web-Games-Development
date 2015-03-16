@@ -6,24 +6,34 @@
  * main is the class that starts as the window loads and hooks up Phaser
  */
 
-var _gameIsInitialised = false,
+var WebAsteroids = {};
+
+// There should only be one of these classes at one time so prototyping doesn't really matter
+WebAsteroids.Main = function () {
     game = null,
-    _testCallback; // Hooks to Phaser.Game class
+        server = new Server();
 
-$(document).ready(function () {
-    initializeGame();
-});
-
-function initializeGame() {
-    console.log(_testCallback);
-    _gameIsInitialised = true;
-    if (_testCallback) {
-        console.log('callback ' + _testCallback);
-        _testCallback();
+    function start() {
+        game = new Phaser.Game(800, 600, Phaser.AUTO, '', {preset: preset, create: create, update: update});
     }
-}
 
-function setTestCallback(callback) {
-    console.log("Setting Callback to " + callback)
-    _testCallback = callback;
+    function preset() {
+
+    }
+
+    function create() {
+
+    }
+
+    function update() {
+        if (Server.connected) {
+            //TODO: add logic to update via server
+        } else {
+            //TODO: Do everything yourself
+        }
+    }
+
+    function connectToServer(ip) {
+        return server.connect(ip);
+    }
 }
