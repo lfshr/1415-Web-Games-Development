@@ -20,11 +20,10 @@ Server.prototype.connect = function(ip){
     this._ip = ip || this._ip;
     // Connect the socket using io passing through the calculated IP
     this._socket = io.connect(this._ip);
-    this._socket.emit('handshake', {clientName: 'test'})
-    this._socket.emit('am i host', function (res) {
-        if (res = true) {
-            alert("I am host!");
-        }
+    // Initialise socket events
+    this.initSocketEvents(this._socket);
+    this.doClientHandshake(this._socket, {
+        clientName: "John Doe"
     })
     //TODO: add some kind of logic to catch connection errors
     this.connected = true;
@@ -70,4 +69,19 @@ Server.prototype.emit = function(channel, msg, callback){
 
         this._socket.emit(channel, msg, callback);
     }
+}
+
+/**
+ *
+ * @param socket
+ * @desc initialises socket events
+ */
+Server.prototype.initSocketEvents = function(socket){
+    socket.on("return handshake", function(args){
+        alert("Callback, woop!");
+    });
+}
+
+Server.prototype.doClientHandshake = function(socket, args){
+    socket.emit("do client handshake", args);
 }
