@@ -216,5 +216,5 @@ pip-log.txt
 .mr.developer.cfg
 
 #Repo-Specific Ignores
-node_modules/
+server/node_modules
 .idea/workspace.xml
