@@ -50,18 +50,6 @@ AsteroidGame.Main = function(args){
         game = new Phaser.Game(_width, _height, _hidden ? Phaser.HEADLESS : Phaser.AUTO, '', {preset: preset, create: create, update: update})
     }
 
-    function preset(){
-
-    }
-
-    function create(){
-
-    }
-
-    function update(){
-
-    }
-
     this.getWidth = function(){
         return _width;
     }
@@ -71,4 +59,16 @@ AsteroidGame.Main = function(args){
     this.isHidden = function(){
         return _hidden;
     }
+}
+
+Asteroid.Main.prototype.preset = function(){
+
+}
+
+Asteroid.Main.prototype.create = function(){
+
+}
+
+Asteroid.Main.prototype.update = function(){
+
 }
