@@ -22,11 +22,23 @@ describe('AsteroidGame', function(){
     });
 
     describe('AsteroidGame.Main', function(){
+        var main;
+        beforeEach(function(){
+            main = new AsteroidGame.Main();
+        });
+
         it("Defines a Main class", function(){
-            var main = new AsteroidGame.Main();
             expect(main).toBeDefined();
             expect(main.players).toBeDefined();
             expect(main.state).toEqual(AsteroidGame.NOSTATE);
         });
+
+        it('Add a new Object to the buffer', function(){
+            var object = new AsteroidGame.Object();
+            main.addObjectToBuffer(object);
+            expect(main.hasObjectInBuffer(object)).toEqual(true);
+        });
     });
+
+
 });

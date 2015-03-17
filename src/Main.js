@@ -8,6 +8,11 @@
 // There's only ever going to be one AsteroidGame so don't worry about it being a global, or about prototyping.
 
 AsteroidGame = {
+    _previousTick: 0,
+    deltaTime: function(){
+        return new Date().getTime() - this._previousTick;
+    },
+    framesPerSecond: 30,
     // Main constants
     NOSTATE: 0,
     PAUSED: 1,
@@ -39,4 +44,29 @@ AsteroidGame.Point = function(x, y){
 AsteroidGame.Main = function(args){
     this.players = [];
     this.state = AsteroidGame.NOSTATE;
+    this._objectBuffer = []
 };
+
+
+AsteroidGame.Main.prototype.start = function(){
+    AsteroidGame._previousTick = new Date().getTime;
+    this.update();
+}
+
+AsteroidGame.Main.prototype.addObjectToBuffer = function(object){
+    if( this.hasObjectInBuffer(object) === false ){
+        var uniqueId = AsteroidGame.getUniqueObjectId();
+        this._objectBuffer[uniqueId] = object;
+    }
+}
+
+AsteroidGame.Main.prototype.hasObjectInBuffer = function(object){
+    return this._objectBuffer.indexOf(object) !== -1;
+}
+
+AsteroidGame.Main.prototype.update = function(){
+    // use setTimeout in server as we don't want this running every time it can
+    setTimeout(this.update(), 1 / AsteroidGame.framesPerSecond);
+    for( var object in this._objectBuffer)
+    AsteroidGame._previousTick = new Date().getTime();
+}
