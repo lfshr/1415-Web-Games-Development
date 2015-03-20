@@ -3,7 +3,8 @@
  */
 var express = require('express'),
     app = express(),
-    path = require('path'),
+    path = require('' +
+        'path'),
     bodyParser = require('body-parser'),
     http = require('http').Server(app),
     io = require('socket.io')(http),
