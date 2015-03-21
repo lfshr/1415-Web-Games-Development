@@ -3,20 +3,21 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title>Asteroid Phaser Multiplayer</title>
-    <script src="lib/phaser/phaser.js"></script>
-    <script src="src/Main.js"></script>
-    <script src="src/Object.js"></script>
-    <script src="src/Player.js"></script>
+    <script data-main="src/Main" src="lib/require.js/require.js"></script>
 </head>
 <body>
 <script type="text/javascript">
-    AsteroidGame.main = new AsteroidGame.Main({
-        width:1024,
-        height:768,
-        drawType: Phaser.AUTO
-    });
 
-    AsteroidGame.main.start();
+    require(['AsteroidGame', '../lib/phaser/phaser'], function(){
+        window.AsteroidGame.main = new window.AsteroidGame.Main({
+            width:1024,
+            height:768,
+            drawType: Phaser.AUTO
+        });
+    
+        window.AsteroidGame.main.start();
+    })
+        
 </script>
 </body>
 </html>
