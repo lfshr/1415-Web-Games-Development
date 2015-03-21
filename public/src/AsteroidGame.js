@@ -1,5 +1,6 @@
 
 define( function(){
+    require(['../lib/phaser/phaser']);
     window.AsteroidGame = {
         _previousTick: 0,
         deltaTime: function(){

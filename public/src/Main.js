@@ -2,8 +2,10 @@
  * Created by LiamF on 16/03/2015.
  */
 
-require(['./AsteroidGame', 'Object.js', 'Player.js'], function(AG, Player){
+require(['./AsteroidGame', 'Object', 'Player'], function(){
     // Holds x and y point logic
+    var AsteroidGame = window.AsteroidGame;
+    
     AsteroidGame.Point = function(x, y){
         this.x = x || 0;
         this.y = y || 0;
@@ -41,30 +43,36 @@ require(['./AsteroidGame', 'Object.js', 'Player.js'], function(AG, Player){
         }
     };
     
+    
+    // Phaser preload callback
     AsteroidGame.Main.prototype.preload = function(){
         this.game.load.image('player', 'assets/player.png');
     };
     
+    // Phaser create callback
     AsteroidGame.Main.prototype.create = function(){
-    
-        var game = this.game,
+        
+        // Store the game variable so we doing have to type "this.game" all the time!
+        var g = this.game,
             players = this.players,
             asteroids = this.asteroids,
             bullets = this.bullets;
     
-        game.renderer.clearBeforeRender = false;
-        game.renderer.roundPixels = true;
+        g.renderer.clearBeforeRender = false;
+        g.renderer.roundPixels = true;
     
-        game.physics.startSystem(Phaser.Physics.ARCADE);
+        g.physics.startSystem(Phaser.Physics.ARCADE);
     
-        players = game.add.group();
-        asteroids = game.add.group();
-        bullets = game.add.group();
+        players = g.add.group();
+        asteroids = g.add.group();
+        bullets = g.add.group();
     
-        var player = new Object({
-            game: this.game,
-            type: AsteroidGame.PLAYERTYPE
+        var player = new AsteroidGame.Player({
+            game: g,
+            type: AsteroidGame.PLAYERTYPE,
+            assetRef: 'player'
         });
+        
     };
     
     AsteroidGame.Main.prototype.update = function(){
