@@ -9,12 +9,9 @@ AsteroidGame.Player = function(args){
     this.id = -1;
 
     if( args !== undefined ){
-        console.log(this);
         this.clientName = args.clientName || clientName;
         this.id = args.id || this.id;
-        if( args.assetRef ){
-            this.loadSprite(args.assetRef);
-        }
+        //console.log(this);
     }
 };
 

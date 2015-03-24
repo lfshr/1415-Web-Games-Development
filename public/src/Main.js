@@ -3,16 +3,14 @@
  */
 
 require(['./AsteroidGame', 'Object', 'Player', 'Server'], function(){
-
-    var AsteroidGame = window.AsteroidGame;
     
-    AsteroidGame.Point = function(x, y){
+    window.AsteroidGame.Point = function(x, y){
         this.x = x || 0;
         this.y = y || 0;
     };
     
     // The main class constructor . Commonly known as "game" in other projects
-    AsteroidGame.Main = function(args){
+    window.AsteroidGame.Main = function(args){
         var game, // Phaser game class
             _width = 800, //width of the phaser canvas
             _height = 600, //height of the phaser canvas
@@ -60,14 +58,14 @@ require(['./AsteroidGame', 'Object', 'Player', 'Server'], function(){
     
     
     // Phaser preload callback
-    AsteroidGame.Main.prototype.preload = function(){
+    window.AsteroidGame.Main.prototype.preload = function(){
         this.game.load.image('player', 'assets/player.png');
     };
     
     // Phaser create callback
-    AsteroidGame.Main.prototype.create = function(){
+    window.AsteroidGame.Main.prototype.create = function(){
         // Store the game variable so we doing have to type "this.game" all the time!
-        var main = AsteroidGame.main,
+        var main = window.AsteroidGame.main,
             g = main.game,
             playerGroup = main.playerGroup,
             asteroidGroup = main.asteroidGroup,
@@ -87,43 +85,52 @@ require(['./AsteroidGame', 'Object', 'Player', 'Server'], function(){
 
         var uniqueID = main.server.getUniquePlayerId();
 
-        var player = new AsteroidGame.Player({
+        var player = new window.AsteroidGame.Player({
             clientName: "The Fish",
             id: uniqueID,
             game: g,
-            type: AsteroidGame.PLAYERTYPE,
+            type: window.AsteroidGame.PLAYERTYPE,
             assetRef: 'player',
             assetGroup: playerGroup,
-            loc: new AsteroidGame.Point(10, 10),
-            size: new AsteroidGame.Point(5, 5)
+            loc: new window.AsteroidGame.Point(10, 10),
+            size: new window.AsteroidGame.Point(5, 5)
         });
 
         players[uniqueID] = player;
         main.server.addControlledPlayerToServer(player);
+        main.server.onUpdatePlayerLocations(function(playersFromServer){
+            //console.log(playersFromServer);
+            for( var i = 0, max = playersFromServer.length; i < max; i++ ){
+                var playeridx = playersFromServer[i].id,
+                    main = window.AsteroidGame.main;
+                if( main.players[playeridx] !== undefined ){
+                    main.players[playeridx].updateLocationFromServer(playersFromServer[i])
+                }
+            }
+        })
         
     };
-    
-    AsteroidGame.Main.prototype.update = function(){
-        // use setTimeout in server as we don't want this running every time it can
-        AsteroidGame._previousTick = new Date().getTime();
 
+    window.AsteroidGame.Main.prototype.update = function(){
+        // use setTimeout in server as we don't want this running every time it can
+        window.AsteroidGame._previousTick = new Date().getTime();
 
     };
-    
-    AsteroidGame.Main.prototype.start = function(){
+
+    window.AsteroidGame.Main.prototype.start = function(){
         // Define the phaser game
         this.game = new Phaser.Game(this._width, this._height, this._hidden ? Phaser.HEADLESS : Phaser.AUTO, '', {preload: this.preload, create: this.create, update: this.update})
-        AsteroidGame._previousTick = new Date().getTime;
+        window.AsteroidGame._previousTick = new Date().getTime;
     };
-    
-    AsteroidGame.Main.prototype.addObjectToBuffer = function(object){
+
+    window.AsteroidGame.Main.prototype.addObjectToBuffer = function(object){
         if( this.hasObjectInBuffer(object) === false ){
-            var uniqueId = AsteroidGame.getUniqueObjectId();
+            var uniqueId = window.AsteroidGame.getUniqueObjectId();
             this._objectBuffer[uniqueId] = object;
         }
     };
-    
-    AsteroidGame.Main.prototype.hasObjectInBuffer = function(object){
+
+    window.AsteroidGame.Main.prototype.hasObjectInBuffer = function(object){
         return this._objectBuffer.indexOf(object) !== -1;
     };
 })

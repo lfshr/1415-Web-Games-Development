@@ -11,7 +11,9 @@ var express = require('express'),
 
     require("./src/Main.js");
 
-var main = new AsteroidGame.Main();
+AsteroidGame.main = new AsteroidGame.Main();
+var main = AsteroidGame.main;
+main.start();
 
 app.get('/', function(req, res){
     res.sendFile(path.join(views, 'index.html'))
@@ -36,8 +38,15 @@ app.use(express.static(path.join(__dirname, 'public')));
 io.on('connection', function(socket){
     console.log("connection made");
     socket.on('player connect', function(player){
-        var clientName = player.clientName;
-        main.addPlayer({socket: socket, player: player});
+        var newPlayer = new AsteroidGame.Player({
+                clientName: player.clientName,
+                id : player.id,
+                loc: player.loc,
+                vel: player.vel,
+                assetRef: player.assetRef
+            });
+
+        main.addPlayer({socket : socket, player: newPlayer});
         console.log("Player "+player.clientName+" connected!");
     });
 
@@ -47,7 +56,28 @@ io.on('connection', function(socket){
         }
     })
 
+    updatePlayer(socket);
+
 })
+
+function updatePlayer(socket){
+    if( socket !== undefined ){
+        setTimeout(updatePlayer, 1 / AsteroidGame.framesPerSecond, socket);
+
+        var locations = [];
+
+        var players = main.getPlayers();
+        for( var i = 0, max = players.length; i < max; i++ ){
+            var player = players[i].player;
+            locations.push({
+                id : player.id,
+                loc: player.loc,
+                vel: player.vel
+            });
+        }
+        socket.emit('update player locations', locations)
+    }
+}
 
 
 http.listen(process.env.PORT || 8080, function(){

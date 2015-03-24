@@ -14,6 +14,7 @@ require(['./AsteroidGame'], function(){
         this.game = undefined; //Phaser.Game
         this.group = undefined; //Phaser.Group
         this.sprite = undefined; //Phaser.Sprite
+        this.assetRef = "unknown";
         
         if( args !== undefined ){
             this.loc = args.loc || this.loc;
@@ -21,6 +22,7 @@ require(['./AsteroidGame'], function(){
             this.type = args.type || this.type;
             this.game = args.game
             this.group = args.assetGroup;
+            this.assetRef = args.assetRef;
         }
     };
     

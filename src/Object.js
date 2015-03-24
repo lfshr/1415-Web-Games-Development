@@ -9,7 +9,7 @@
 
 AsteroidGame.Object = function(args){
     this.loc = {x:0, y:0};
-    this.vel = {x:0, y:1};
+    this.vel = {x:0, y:100};
     this.state = AsteroidGame.INBUFFER;
     this.type = AsteroidGame.NOTYPE;
     this.game = undefined; //Phaser.Game
@@ -42,8 +42,8 @@ AsteroidGame.Object.prototype.move = function(x, y){
 };
 
 AsteroidGame.Object.prototype.update = function(){
-    this.pos.x += this.vel.x * AsteroidGame.deltaTime;
-    this.pos.y += this.vel.y * AsteroidGame.deltaTime;
+    this.loc.x += this.vel.x * AsteroidGame.deltaTime;
+    this.loc.y += this.vel.y * AsteroidGame.deltaTime;
 };
 
 AsteroidGame.Object.prototype.syncSprite = function(){
@@ -57,10 +57,3 @@ AsteroidGame.Object.prototype.create = function(args){
         return;
     }
 };
-
-AsteroidGame.Object.prototype.loadSprite = function(name){
-
-    this.sprite = this.game.add.sprite(this.loc.x, this.loc.y, this.assetRef || name, 0, this.group);
-    console.log(this.group)
-}
-

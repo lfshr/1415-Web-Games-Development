@@ -28,21 +28,25 @@ AsteroidGame.Main = function(){
     // Pass the arguments to the variables
 
     // Call this function to start the game.
-    function start(){
-        this.update();
-    }
 
-    function update(){
-        setTimeout(update, 1 / AsteroidGame.framesPerSecond);
 
-        AsteroidGame._previousTick = new Date().getTime;
-        AsteroidGame.deltaTime = new Date().getTime() - AsteroidGame._previousTick;
 
-        for( var player in players ){
-            player.update();
-        }
-    }
 };
+
+AsteroidGame.Main.prototype.start = function(){
+    this.update();
+}
+
+AsteroidGame.Main.prototype.update = function(){
+    setTimeout(AsteroidGame.main.update, 1 / AsteroidGame.framesPerSecond * 1000);
+    AsteroidGame.deltaTime = (new Date().getTime() - AsteroidGame._previousTick) / 1000;
+    AsteroidGame._previousTick = new Date().getTime();
+
+
+    for(var i = 0, max = AsteroidGame.main.players.length; i < max; i++){
+        AsteroidGame.main.players[i].player.update();
+    }
+}
 
 AsteroidGame.Main.prototype.getUniquePlayerId = function(){
     //TODO: Make this less likely to screw up
