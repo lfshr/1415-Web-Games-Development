@@ -2,36 +2,42 @@
  * Created by LiamF on 17/03/2015.
  */
 
-require(['AsteroidGame'], function(){
+require(['AsteroidGame', 'Object'], function(){
     AsteroidGame = window.AsteroidGame;
+    ObjClass = window.AsteroidGame.Object;
+    
+   
+    
     AsteroidGame.Player = function(args){
-        var clientName = "John Doe",
-            game = null,
-            type = AsteroidGame.PLAYERTYPE;
-            phaserAsset = null;
+        window.AsteroidGame.Object.apply(this, [args]);
+        
+        /*this.clientName = "John Doe";
+        this._game = null;
+        this._type = AsteroidGame.PLAYERTYPE;
+        this.phaserAsset = null;
             
-        this.getGame = function(){
-            return game;
-        }
-        
-        this.getType = function(){
-            return type;
-        }
-        
-        this.getPhaserAsset = function(){
-            return phasetAsset;
-        }
         
         if( args !== undefined ){
-            clientName = args.clientName || clientName;
-            game = args.game || game;
+            this.clientName = args.clientName || clientName;
+            this._game = args.game || game;
             type = args.type || type;
             
             if( args.assetRef ){
                 if( game ){
-                    phasetAsset = game.add.sprite(0, 0, args.assetRef);
+                    phaserAsset = game.add.sprite(0, 0, args.assetRef);
                 }
             }
+        }*/
+    }
+    
+    var test = new AsteroidGame.Player();
+    
+    alert(test.hasOwnProperty('clientName'))
+    
+    AsteroidGame.Player.prototype.getPlayerLiteral = function(){
+        return{
+            clientName: this.clientName,
+            type: this._type;
         }
     }
 });
