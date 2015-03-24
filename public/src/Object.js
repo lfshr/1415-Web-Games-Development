@@ -13,7 +13,8 @@ require(['./AsteroidGame'], function(){
         this.type = AsteroidGame.NOTYPE;
         this.game = undefined;
         this.sprite = undefined;
-    
+        this.onSpawn = args.onSpawn || function(){};
+        
         if( args !== undefined ){
             this.loc = args.loc || this.loc;
             this.state = args.state || this.state;

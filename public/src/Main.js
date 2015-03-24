@@ -6,6 +6,17 @@ require(['./AsteroidGame', 'Object', 'Player'], function(){
     // Holds x and y point logic
     var AsteroidGame = window.AsteroidGame;
     
+    window.inherit = function(cl, inheritcl){
+        if( cl !== undefined && inheritcl !== undefined ){
+            try{
+                cl.prototype = inheritc1.prototype;
+            }catch(error){
+                console.error(error.message);
+            }
+        }
+        cl.prototype = new inheritcl();
+    }
+    
     AsteroidGame.Point = function(x, y){
         this.x = x || 0;
         this.y = y || 0;
