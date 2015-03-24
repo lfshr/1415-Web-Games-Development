@@ -11,15 +11,16 @@ require(['./AsteroidGame'], function(){
         this.loc = {x:0, y:0};
         this.state = AsteroidGame.INBUFFER;
         this.type = AsteroidGame.NOTYPE;
-        this.game = undefined;
-        this.sprite = undefined;
-        this.onSpawn = args.onSpawn || function(){};
+        this.game = undefined; //Phaser.Game
+        this.group = undefined; //Phaser.Group
+        this.sprite = undefined; //Phaser.Sprite
         
         if( args !== undefined ){
             this.loc = args.loc || this.loc;
             this.state = args.state || this.state;
             this.type = args.type || this.type;
             this.game = args.game
+            this.group = args.assetGroup;
         }
     };
     
@@ -32,17 +33,20 @@ require(['./AsteroidGame'], function(){
         this.loc.y = y || this.loc.y;
     };
     
-    window.AsteroidGame.Object.prototype.move = function(args){
-        if( args !== undefined ){
-            this.loc.x = this.loc.x + args.x || this.loc.x;
-            this.loc.y = this.loc.y + args.y || this.loc.y;
-        }
+    window.AsteroidGame.Object.prototype.move = function(x, y){
+        this.loc.x = x || this.loc.x;
+        this.loc.y = y || this.loc.y;
     };
     
     window.AsteroidGame.Object.prototype.update = function(){
         this.pos.x += this.velocity.x * AsteroidGame.deltaTime();
         this.pos.y += this.velocity.y * AsteroidGame.deltaTime();
     };
+
+    window.AsteroidGame.Object.prototype.syncSprite = function(){
+        this.sprite.x = this.loc.x;
+        this.sprite.y = this.loc.y;
+    }
     
     window.AsteroidGame.Object.prototype.create = function(args){
         if( args === null ){
@@ -50,5 +54,11 @@ require(['./AsteroidGame'], function(){
             return;
         }
     };
+
+    window.AsteroidGame.Object.prototype.loadSprite = function(name){
+
+        this.sprite = this.game.add.sprite(this.loc.x, this.loc.y, name, 0, this.group);
+        console.log(this.group)
+    }
 })
     

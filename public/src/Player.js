@@ -3,42 +3,32 @@
  */
 
 require(['AsteroidGame', 'Object'], function(){
-    AsteroidGame = window.AsteroidGame;
-    ObjClass = window.AsteroidGame.Object;
-    
-   
-    
+    var AsteroidGame = window.AsteroidGame;
+
     AsteroidGame.Player = function(args){
-        window.AsteroidGame.Object.apply(this, [args]);
-        
-        /*this.clientName = "John Doe";
-        this._game = null;
-        this._type = AsteroidGame.PLAYERTYPE;
-        this.phaserAsset = null;
-            
+        // Inherit Object class
+        AsteroidGame.Object.apply(this, [args]);
+        this.clientName = "John Doe";
         
         if( args !== undefined ){
+            console.log(this);
             this.clientName = args.clientName || clientName;
-            this._game = args.game || game;
-            type = args.type || type;
             
             if( args.assetRef ){
-                if( game ){
-                    phaserAsset = game.add.sprite(0, 0, args.assetRef);
-                }
+                this.loadSprite(args.assetRef);
             }
-        }*/
-    }
+        }
+    };
     
     var test = new AsteroidGame.Player();
-    
-    alert(test.hasOwnProperty('clientName'))
+
+    AsteroidGame.Player.prototype = AsteroidGame.Object.prototype;
     
     AsteroidGame.Player.prototype.getPlayerLiteral = function(){
         return{
             clientName: this.clientName,
-            type: this._type;
+            type: this._type
         }
-    }
+    };
 });
     

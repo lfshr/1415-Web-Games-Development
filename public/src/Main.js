@@ -3,19 +3,8 @@
  */
 
 require(['./AsteroidGame', 'Object', 'Player'], function(){
-    // Holds x and y point logic
+
     var AsteroidGame = window.AsteroidGame;
-    
-    window.inherit = function(cl, inheritcl){
-        if( cl !== undefined && inheritcl !== undefined ){
-            try{
-                cl.prototype = inheritc1.prototype;
-            }catch(error){
-                console.error(error.message);
-            }
-        }
-        cl.prototype = new inheritcl();
-    }
     
     AsteroidGame.Point = function(x, y){
         this.x = x || 0;
@@ -27,10 +16,17 @@ require(['./AsteroidGame', 'Object', 'Player'], function(){
         var game, // Phaser game class
             _width = 800, //width of the phaser canvas
             _height = 600, //height of the phaser canvas
-            _hidden = false, //is the canvas hidden?
-            players, // Phaser group for players
-            asteroids, // Phaser group for asteroids
-            bullets; // Phaser group for bullets
+            _hidden = false //is the canvas hidden?
+        this.players = [];
+        this.asteroids = [];
+        this.bullets = [];
+        // Phaser Groups
+        this.playerGroup;
+        this.asteroidGroup;
+        this.bulletGroup;
+        // Points to index of controlled player in players array.
+        // This should be synced with the server!
+        this.controlledPlayerIndex = -1;
     
         // Pass the arguments to the variables
         if( args !== undefined ){
@@ -62,33 +58,42 @@ require(['./AsteroidGame', 'Object', 'Player'], function(){
     
     // Phaser create callback
     AsteroidGame.Main.prototype.create = function(){
-        
         // Store the game variable so we doing have to type "this.game" all the time!
-        var g = this.game,
-            players = this.players,
-            asteroids = this.asteroids,
-            bullets = this.bullets;
+        var main = AsteroidGame.main,
+            g = main.game,
+            playerGroup = main.playerGroup,
+            asteroidGroup = main.asteroidGroup,
+            bulletGroup = main.bulletGroup,
+            players = main.players,
+            asteroids = main.asteroids,
+            bullets = main.bullets;
     
         g.renderer.clearBeforeRender = false;
         g.renderer.roundPixels = true;
     
         g.physics.startSystem(Phaser.Physics.ARCADE);
     
-        players = g.add.group();
-        asteroids = g.add.group();
-        bullets = g.add.group();
+        playerGroup = g.add.group();
+        asteroidGroup = g.add.group();
+        bulletGroup = g.add.group();
     
-        var player = new AsteroidGame.Player({
+        players.push(new AsteroidGame.Player({
+            clientName: "The Fish",
             game: g,
             type: AsteroidGame.PLAYERTYPE,
-            assetRef: 'player'
-        });
+            assetRef: 'player',
+            assetGroup: playerGroup,
+            loc: new AsteroidGame.Point(10, 10),
+            size: new AsteroidGame.Point(5, 5)
+        }));
         
     };
     
     AsteroidGame.Main.prototype.update = function(){
         // use setTimeout in server as we don't want this running every time it can
         AsteroidGame._previousTick = new Date().getTime();
+
+
     };
     
     AsteroidGame.Main.prototype.start = function(){
