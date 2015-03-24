@@ -2,7 +2,7 @@
  * Created by LiamF on 16/03/2015.
  */
 
-require(['./AsteroidGame', 'Object', 'Player'], function(){
+require(['./AsteroidGame', 'Object', 'Player', 'Server'], function(){
 
     var AsteroidGame = window.AsteroidGame;
     
@@ -27,6 +27,8 @@ require(['./AsteroidGame', 'Object', 'Player'], function(){
         // Points to index of controlled player in players array.
         // This should be synced with the server!
         this.controlledPlayerIndex = -1;
+        this.server = new window.AsteroidGame.Server();
+        this.server.uri = "http://localhost:8080";
     
         // Pass the arguments to the variables
         if( args !== undefined ){
@@ -37,6 +39,7 @@ require(['./AsteroidGame', 'Object', 'Player'], function(){
     
         // Call this function to start the game.
         function start(){
+
         }
     
         this.getWidth = function(){
@@ -76,8 +79,10 @@ require(['./AsteroidGame', 'Object', 'Player'], function(){
         playerGroup = g.add.group();
         asteroidGroup = g.add.group();
         bulletGroup = g.add.group();
-    
-        players.push(new AsteroidGame.Player({
+
+        var uniqueID = main.server.getUniquePlayerId();
+
+        players[uniqueID] = new AsteroidGame.Player({
             clientName: "The Fish",
             game: g,
             type: AsteroidGame.PLAYERTYPE,
@@ -85,7 +90,7 @@ require(['./AsteroidGame', 'Object', 'Player'], function(){
             assetGroup: playerGroup,
             loc: new AsteroidGame.Point(10, 10),
             size: new AsteroidGame.Point(5, 5)
-        }));
+        });
         
     };
     

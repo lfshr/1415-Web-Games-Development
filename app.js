@@ -9,6 +9,10 @@ var express = require('express'),
     io = require('socket.io')(http),
     views = path.join(__dirname, 'views');
 
+    require("./src/Main.js");
+
+var main = new AsteroidGame.Main();
+
 app.get('/', function(req, res){
     res.sendFile(path.join(views, 'index.html'))
 });
@@ -20,6 +24,10 @@ app.get('/test', function(req, res){
 app.get('/playerlocations', function(req,res){
     res.json({"0": {"clientName":"John Doe", "loc": {"x":50, "y":50}, "assetType": 'player'}});
 });
+
+app.get('/getuniqueplayerid', function( req, res){
+    res.send(main.getUniquePlayerId().toString());
+})
 
 app.use(express.static(path.join(__dirname, 'public')));
 

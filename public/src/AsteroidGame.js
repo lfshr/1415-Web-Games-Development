@@ -3,9 +3,7 @@ define( function(){
     require(['../lib/phaser/phaser']);
     window.AsteroidGame = {
         _previousTick: 0,
-        deltaTime: function(){
-            return new Date().getTime() - this._previousTick;
-        },
+        deltaTime: 0.0,
         framesPerSecond: 30,
         // Main constants
         NOSTATE: 0,
