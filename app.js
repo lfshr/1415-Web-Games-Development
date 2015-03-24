@@ -32,9 +32,22 @@ app.get('/getuniqueplayerid', function( req, res){
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-io.on('connection', function(socket){
 
-});
+io.on('connection', function(socket){
+    console.log("connection made");
+    socket.on('player connect', function(player){
+        var clientName = player.clientName;
+        main.addPlayer({socket: socket, player: player});
+        console.log("Player "+player.clientName+" connected!");
+    });
+
+    socket.on('getuniqueplayerid', function(callback){
+        if( typeof callback == "function" ){
+            callback(main.getUniquePlayerId());
+        }
+    })
+
+})
 
 
 http.listen(process.env.PORT || 8080, function(){

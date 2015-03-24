@@ -29,6 +29,11 @@ require(['./AsteroidGame', 'Object', 'Player', 'Server'], function(){
         this.controlledPlayerIndex = -1;
         this.server = new window.AsteroidGame.Server();
         this.server.uri = "http://localhost:8080";
+        this.server.onPlayerConnect(function(){
+
+        });
+
+        this.server.connect();
     
         // Pass the arguments to the variables
         if( args !== undefined ){
@@ -82,8 +87,9 @@ require(['./AsteroidGame', 'Object', 'Player', 'Server'], function(){
 
         var uniqueID = main.server.getUniquePlayerId();
 
-        players[uniqueID] = new AsteroidGame.Player({
+        var player = new AsteroidGame.Player({
             clientName: "The Fish",
+            id: uniqueID,
             game: g,
             type: AsteroidGame.PLAYERTYPE,
             assetRef: 'player',
@@ -91,6 +97,9 @@ require(['./AsteroidGame', 'Object', 'Player', 'Server'], function(){
             loc: new AsteroidGame.Point(10, 10),
             size: new AsteroidGame.Point(5, 5)
         });
+
+        players[uniqueID] = player;
+        main.server.addControlledPlayerToServer(player);
         
     };
     

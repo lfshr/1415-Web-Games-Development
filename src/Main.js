@@ -42,16 +42,17 @@ AsteroidGame.Main = function(){
             player.update();
         }
     }
-
-    function addPlayer(player){
-
-    }
-
-
-
 };
 
 AsteroidGame.Main.prototype.getUniquePlayerId = function(){
     //TODO: Make this less likely to screw up
     return this.players.length;
-}
+};
+
+AsteroidGame.Main.prototype.addPlayer = function(player){
+    this.players.push(player);
+};
+
+AsteroidGame.Main.prototype.getPlayers = function(){
+    return this.players;
+};

@@ -15,6 +15,7 @@ AsteroidGame.Object = function(args){
     this.game = undefined; //Phaser.Game
     this.group = undefined; //Phaser.Group
     this.sprite = undefined; //Phaser.Sprite
+    this.assetRef = "unknown";
 
     if( args !== undefined ){
         this.loc = args.loc || this.loc;
@@ -22,6 +23,7 @@ AsteroidGame.Object = function(args){
         this.type = args.type || this.type;
         this.game = args.game
         this.group = args.assetGroup;
+        this.assetRef = args.assetRef || "unknown"
     }
 };
 
@@ -58,7 +60,7 @@ AsteroidGame.Object.prototype.create = function(args){
 
 AsteroidGame.Object.prototype.loadSprite = function(name){
 
-    this.sprite = this.game.add.sprite(this.loc.x, this.loc.y, name, 0, this.group);
+    this.sprite = this.game.add.sprite(this.loc.x, this.loc.y, this.assetRef || name, 0, this.group);
     console.log(this.group)
 }
 

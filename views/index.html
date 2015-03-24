@@ -3,12 +3,13 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title>Asteroid Phaser Multiplayer</title>
+    <script src="lib/socket.io/socket.io.js"></script>
     <script data-main="src/Main" src="lib/require.js/require.js"></script>
 </head>
 <body>
 <script type="text/javascript">
     var lib = '../lib/'
-    require(['AsteroidGame', lib+'phaser/phaser', lib+'jquery/jquery-1.11.2.min' ], function(){
+    require(['AsteroidGame', lib+'phaser/phaser', lib+'jquery/jquery-1.11.2.min'], function(){
         window.AsteroidGame.main = new window.AsteroidGame.Main({
             width:1024,
             height:768,
