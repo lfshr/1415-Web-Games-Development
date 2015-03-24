@@ -7,8 +7,8 @@
 </head>
 <body>
 <script type="text/javascript">
-
-    require(['AsteroidGame', '../lib/phaser/phaser'], function(){
+    var lib = '../lib/'
+    require(['AsteroidGame', lib+'phaser/phaser', lib+'angular/angular' ], function(){
         window.AsteroidGame.main = new window.AsteroidGame.Main({
             width:1024,
             height:768,

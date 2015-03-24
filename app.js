@@ -17,6 +17,10 @@ app.get('/test', function(req, res){
     res.sendFile(path.join(views, 'SpecRunner.html'));
 })
 
+app.get('/playerlocations', function(req,res){
+    res.json({"0": {"clientName":"John Doe", "loc": {"x":50, "y":50}, "assetType": 'player'}});
+});
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 
