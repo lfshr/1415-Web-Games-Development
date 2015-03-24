@@ -37,6 +37,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 io.on('connection', function(socket){
     console.log("connection made");
+    if( main.getPlayers() !== undefined ){
+        console.log("Sending Players:");
+        console.log(main.getPlayers());
+        socket.emit('init players', main.getPlayers());
+    }
+
     socket.on('player connect', function(player){
         var newPlayer = new AsteroidGame.Player({
                 clientName: player.clientName,
@@ -48,6 +54,7 @@ io.on('connection', function(socket){
 
         main.addPlayer({socket : socket, player: newPlayer});
         console.log("Player "+player.clientName+" connected!");
+        io.emit('player connect', player);
     });
 
     socket.on('getuniqueplayerid', function(callback){
@@ -68,12 +75,13 @@ function updatePlayer(socket){
 
         var players = main.getPlayers();
         for( var i = 0, max = players.length; i < max; i++ ){
-            var player = players[i].player;
-            locations.push({
-                id : player.id,
-                loc: player.loc,
-                vel: player.vel
-            });
+            if( players[i] !== undefined ){
+                locations.push({
+                    id : players[i].id,
+                    loc: players[i].loc,
+                    vel: players[i].vel
+                });
+            }
         }
         socket.emit('update player locations', locations)
     }

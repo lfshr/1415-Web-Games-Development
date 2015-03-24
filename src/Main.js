@@ -17,7 +17,7 @@ AsteroidGame.Point = function(x, y){
 }
 
 AsteroidGame.Main = function(){
-    //this.players = [];
+    //this.clients = [];
     //this.state = AsteroidGame.NOSTATE;
     //this._objectBuffer = []
 
@@ -53,10 +53,18 @@ AsteroidGame.Main.prototype.getUniquePlayerId = function(){
     return this.players.length;
 };
 
-AsteroidGame.Main.prototype.addPlayer = function(player){
-    this.players.push(player);
+AsteroidGame.Main.prototype.addPlayer = function(client){
+    this.players.push(client);
 };
 
 AsteroidGame.Main.prototype.getPlayers = function(){
-    return this.players;
+    var players = [];
+    for( var x = 0, max = this.players.length; x < max; x++ ){
+        players.push( this.players[x].player )
+    }
+    return players;
 };
+
+AsteroidGame.Main.prototype.getClients = function(){
+    return this.players;
+}

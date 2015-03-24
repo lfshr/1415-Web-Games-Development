@@ -21,7 +21,7 @@ AsteroidGame.Object = function(args){
         this.loc = args.loc || this.loc;
         this.state = args.state || this.state;
         this.type = args.type || this.type;
-        this.game = args.game
+        this.game = args.game || AsteroidGame.main.game;
         this.group = args.assetGroup;
         this.assetRef = args.assetRef || "unknown"
     }
@@ -44,6 +44,10 @@ AsteroidGame.Object.prototype.move = function(x, y){
 AsteroidGame.Object.prototype.update = function(){
     this.loc.x += this.vel.x * AsteroidGame.deltaTime;
     this.loc.y += this.vel.y * AsteroidGame.deltaTime;
+
+    if( this.loc.y < 0 || this.loc.y > 500 ){
+        this.vel.y *=-1;
+    }
 };
 
 AsteroidGame.Object.prototype.syncSprite = function(){

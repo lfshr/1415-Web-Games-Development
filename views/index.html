@@ -4,20 +4,24 @@
     <meta charset="UTF-8">
     <title>Asteroid Phaser Multiplayer</title>
     <script src="lib/socket.io/socket.io.js"></script>
-    <script data-main="src/Main" src="lib/require.js/require.js"></script>
+    <script src="lib/phaser/phaser.js"></script>
+    <script src="lib/jquery/jquery-1.11.2.min.js"></script>
+    <!--<script data-main="src/Main" src="lib/require.js/require.js"></script>-->
+    <script src="src/AsteroidGame.js"></script>
+    <script src="src/Server.js"></script>
+    <script src="src/Main.js"></script>
+    <script src="src/Object.js"></script>
+    <script src="src/Player.js"></script>
 </head>
 <body>
 <script type="text/javascript">
     var lib = '../lib/'
-    require(['AsteroidGame', lib+'phaser/phaser', lib+'jquery/jquery-1.11.2.min'], function(){
-        window.AsteroidGame.main = new window.AsteroidGame.Main({
-            width:1024,
-            height:768,
-            drawType: Phaser.AUTO
-        });
-    
-        window.AsteroidGame.main.start();
-    })
+    AsteroidGame.main = new window.AsteroidGame.Main({
+        width: 1024,
+        height: 768,
+        drawType: Phaser.AUTO
+    });
+    AsteroidGame.main.start();
         
 </script>
 </body>
