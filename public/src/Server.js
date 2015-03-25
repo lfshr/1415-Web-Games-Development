@@ -35,9 +35,9 @@ AsteroidGame.Server.prototype.connect = function(ipAddress){
     });
 
     this.socket.on('init players', function(players){
-        for(var x = 0, max = players.length; x < max; x++){
-            AsteroidGame.main.addPlayer(players[x]);
-        }
+        //for(var x = 0, max = players.length; x < max; x++){
+            //AsteroidGame.main.addPlayer(players[x]);
+        //}
     })
 };
 
@@ -62,15 +62,23 @@ AsteroidGame.Server.prototype.addControlledPlayerToServer = function(player){
     });
 }
 
-AsteroidGame.Server.prototype.getPlayers = function(){
+AsteroidGame.Server.prototype.initPlayers = function(){
     var players = [];
-    $.ajax({
+    /*$.ajax({
         url: "/playerlocations",
         async: false
     })
         .done(function( data ){
             players = data;
-        });
+        });*/
+
+    this.socket.emit('get player locations', function(data){
+        console.log("Received "+data.length+" players from server");
+        for(var x = 0, max = data.length; x < max; x++){
+            console.log("Adding Player to Stage");
+            AsteroidGame.main.addPlayer(data[x]);
+        }
+    });
 
     return players;
 };

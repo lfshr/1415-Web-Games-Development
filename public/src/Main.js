@@ -26,19 +26,7 @@ AsteroidGame.Main = function(args){
     // Points to index of controlled player in players array.
     // This should be synced with the server!
     this.controlledPlayerIndex = -1;
-    this.server = new AsteroidGame.Server();
-    this.server.ipAddress = "localhost:3000";
-    //this.server.ipAddress = document.URL;
-    this.server.onPlayerConnect(function(player){
-        if( player !== undefined ){
-            console.log("playerid: "+player.id+"   controlledid: "+AsteroidGame.main.controlledPlayerIndex);
-            if( player.id !== AsteroidGame.main.controlledPlayerIndex || player.id === -1 ){
-                AsteroidGame.main.addPlayer(player);
-            }
-        }
-    });
-
-    this.server.connect();
+    this.server = undefined;
 
     // Pass the arguments to the variables
     if( args !== undefined ){
@@ -92,6 +80,8 @@ AsteroidGame.Main.prototype.create = function(){
         asteroids = main.asteroids,
         bullets = main.bullets;
 
+    this.players = undefined;
+
     g.renderer.clearBeforeRender = false;
     g.renderer.roundPixels = true;
 
@@ -100,6 +90,11 @@ AsteroidGame.Main.prototype.create = function(){
     this.playerGroup = g.add.group();
     asteroidGroup = g.add.group();
     bulletGroup = g.add.group();
+
+
+    main.server = new AsteroidGame.Server();
+    main.server.ipAddress = "localhost:3000";
+    main.server.connect();
 
     var uniqueID = main.server.getUniquePlayerId();
 
@@ -112,6 +107,17 @@ AsteroidGame.Main.prototype.create = function(){
         assetGroup: this.playerGroup,
         loc: new AsteroidGame.Point(10, 10),
         size: new AsteroidGame.Point(5, 5)
+    });
+
+    main.server.initPlayers();
+    //this.server.ipAddress = document.URL;
+    main.server.onPlayerConnect(function(player){
+        if( player !== undefined ){
+            console.log("playerid: "+player.id+"   controlledid: "+AsteroidGame.main.controlledPlayerIndex);
+            if( player.id !== AsteroidGame.main.controlledPlayerIndex || player.id === -1 ){
+                AsteroidGame.main.addPlayer(player);
+            }
+        }
     });
 
     players[uniqueID] = player;
@@ -155,12 +161,17 @@ AsteroidGame.Main.prototype.hasObjectInBuffer = function(object){
 AsteroidGame.Main.prototype.addPlayer = function(args){
     var main = AsteroidGame.main;
 
-    if( args.id === main.controlledPlayerIndex || args.id === -1 || main.players[args.id] !== undefined )return;
-    console.log("Main Game: "+main.game);
+    if( args.id === undefined || args.id === main.controlledPlayerIndex || args.id === -1 || main.players[args.id] !== undefined ){
+        console.error(args);
+        return;
+    }
+
     args.game = main.game;
-    args.group = main.playerGroup;
+    args.group = main.playerGroup || this.game.add.group();
     args.type = AsteroidGame.PLAYERTYPE;
     args.size = new AsteroidGame.Point(5, 5);
+    console.log("adding player:");
+    console.log(args);
     var player = new AsteroidGame.Player(args);
-    this.players.push(player);
+    this.players[args.id] = player;
 }

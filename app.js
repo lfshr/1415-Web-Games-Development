@@ -40,7 +40,7 @@ io.on('connection', function(socket){
     if( main.getPlayers() !== undefined ){
         console.log("Sending Players:");
         console.log(main.getPlayers());
-        socket.emit('init players', main.getPlayers());
+        //socket.emit('init players', main.getPlayers());
     }
 
     socket.on('player connect', function(player){
@@ -56,6 +56,14 @@ io.on('connection', function(socket){
         console.log("Player "+player.clientName+" connected!");
         io.emit('player connect', player);
     });
+
+    socket.on('get player locations', function(callback){
+        if( callback !== undefined ){
+            if( typeof callback === "function" ){
+                callback(main.getPlayers());
+            }
+        }
+    })
 
     socket.on('getuniqueplayerid', function(callback){
         if( typeof callback == "function" ){
