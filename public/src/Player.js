@@ -33,22 +33,6 @@ AsteroidGame.Player.prototype.getPlayerLiteral = function(){
     }
 };
 
-AsteroidGame.Player.prototype.updateLocationFromServer = function(args){
-    //console.log(args);
-    if( args !== undefined ){
-        this.loc.x = args.loc.x || this.loc.x;
-        this.loc.y = args.loc.y || this.loc.y;
-    }
-
-    if( this.sprite !== undefined ) {
-        if (this.sprite.name === "") {
-            this.sprite.destroy();
-            this.loadSprite();
-        }
-    }
-    this.syncSprite();
-}
-
 AsteroidGame.Player.prototype.setId = function(newid){
     this.id = newid;
 }

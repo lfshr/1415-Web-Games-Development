@@ -57,6 +57,7 @@ AsteroidGame.Main.prototype.preload = function(){
 
     var main = AsteroidGame.main;
     main.game.load.image('player', 'assets/player.png');
+    main.game.load.image('enemy', 'assets/enemy.png');
 
     main.preloaded = true;
     console.log(main._gamepreloadcallbacks);
@@ -84,6 +85,7 @@ AsteroidGame.Main.prototype.create = function(){
 
     g.renderer.clearBeforeRender = false;
     g.renderer.roundPixels = true;
+    g.stage.disableVisibilityChange = true;
 
     g.physics.startSystem(Phaser.Physics.ARCADE);
 
@@ -97,7 +99,7 @@ AsteroidGame.Main.prototype.create = function(){
     main.server.connect();
 
     var uniqueID = main.server.getUniquePlayerId();
-
+    main.controlledPlayerIndex = uniqueID;
     var player = new AsteroidGame.Player({
         clientName: "The Fish",
         id: uniqueID,
@@ -113,7 +115,6 @@ AsteroidGame.Main.prototype.create = function(){
     //this.server.ipAddress = document.URL;
     main.server.onPlayerConnect(function(player){
         if( player !== undefined ){
-            console.log("playerid: "+player.id+"   controlledid: "+AsteroidGame.main.controlledPlayerIndex);
             if( player.id !== AsteroidGame.main.controlledPlayerIndex || player.id === -1 ){
                 AsteroidGame.main.addPlayer(player);
             }
@@ -123,12 +124,14 @@ AsteroidGame.Main.prototype.create = function(){
     players[uniqueID] = player;
     main.server.addControlledPlayerToServer(player);
     main.server.onUpdatePlayerLocations(function(playersFromServer){
+        var main = AsteroidGame.main;
         //console.log(playersFromServer);
         for( var i = 0, max = playersFromServer.length; i < max; i++ ){
-            var playeridx = playersFromServer[i].id,
-                main = AsteroidGame.main;
-            if( main.players[playeridx] !== undefined ){
-                main.players[playeridx].updateLocationFromServer(playersFromServer[i])
+            var playeridx = playersFromServer[i].id;
+            if( playeridx !== main.controlledPlayerIndex ) {
+                if (main.players[playeridx] !== undefined) {
+                    main.players[playeridx].updateLocationFromServer(playersFromServer[i])
+                }
             }
         }
     })
@@ -137,7 +140,16 @@ AsteroidGame.Main.prototype.create = function(){
 
 AsteroidGame.Main.prototype.update = function(){
     // use setTimeout in server as we don't want this running every time it can
+    AsteroidGame.deltaTime = (new Date().getTime() - AsteroidGame._previousTick) / 1000;
     AsteroidGame._previousTick = new Date().getTime();
+
+    var main = AsteroidGame.main;
+    for( var i = 0; i < main.players.length; i++ ){
+        var player = main.players[i];
+        if( player !== undefined ){
+            player.update();
+        }
+    }
 
 };
 
@@ -162,10 +174,11 @@ AsteroidGame.Main.prototype.addPlayer = function(args){
     var main = AsteroidGame.main;
 
     if( args.id === undefined || args.id === main.controlledPlayerIndex || args.id === -1 || main.players[args.id] !== undefined ){
-        console.error(args);
+        console.log("addPlayer unsuccessful, may be trying to overwrite local player");
         return;
     }
 
+    args.assetRef = "enemy";
     args.game = main.game;
     args.group = main.playerGroup || this.game.add.group();
     args.type = AsteroidGame.PLAYERTYPE;
@@ -173,5 +186,11 @@ AsteroidGame.Main.prototype.addPlayer = function(args){
     console.log("adding player:");
     console.log(args);
     var player = new AsteroidGame.Player(args);
+    console.log("Args Location")
+    console.log(args.loc);
+    player.group = main.playerGroup;
+    player.loadSprite();
+    player.setLocation(args.loc.x, args.loc.y);
+    player.setVelocity(args.loc.x, args.loc.y);
     this.players[args.id] = player;
 }

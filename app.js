@@ -37,11 +37,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 io.on('connection', function(socket){
     console.log("connection made");
-    if( main.getPlayers() !== undefined ){
-        console.log("Sending Players:");
-        console.log(main.getPlayers());
-        //socket.emit('init players', main.getPlayers());
-    }
+    socket.playerId = -1;
 
     socket.on('player connect', function(player){
         var newPlayer = new AsteroidGame.Player({
@@ -51,15 +47,26 @@ io.on('connection', function(socket){
                 vel: player.vel,
                 assetRef: player.assetRef
             });
-
+        socket.playerId = player.id;
         main.addPlayer({socket : socket, player: newPlayer});
         console.log("Player "+player.clientName+" connected!");
         io.emit('player connect', player);
     });
 
+    socket.on('post player', function(args){
+        if( socket.testWoO === undefined ){
+            console.log("post player args");
+            console.log(args);
+            socket.testWoO = true;
+        }
+        main.postPlayerFromClient(args);
+    })
+
     socket.on('get player locations', function(callback){
         if( callback !== undefined ){
             if( typeof callback === "function" ){
+                console.log("Sending player locations");
+                console.log(main.getPlayers());
                 callback(main.getPlayers());
             }
         }
@@ -70,6 +77,14 @@ io.on('connection', function(socket){
             callback(main.getUniquePlayerId());
         }
     })
+
+    socket.on('disconnect', function(reason){
+        if( main.players[socket.playerId] !== undefined ){
+            console.log( "Player "+main.players[socket.playerId].player.clientName+" disconnected");
+            main.players[socket.playerId] = undefined;
+            io.emit("player disconnect", socket.playerId, reason);
+        }
+    });
 
     updatePlayer(socket);
 

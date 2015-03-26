@@ -42,9 +42,9 @@ AsteroidGame.Main.prototype.update = function(){
     AsteroidGame.deltaTime = (new Date().getTime() - AsteroidGame._previousTick) / 1000;
     AsteroidGame._previousTick = new Date().getTime();
 
-
     for(var i = 0, max = AsteroidGame.main.players.length; i < max; i++){
-        AsteroidGame.main.players[i].player.update();
+        if( AsteroidGame.main.players[i] !== undefined )
+            AsteroidGame.main.players[i].player.update();
     }
 }
 
@@ -60,11 +60,24 @@ AsteroidGame.Main.prototype.addPlayer = function(client){
 AsteroidGame.Main.prototype.getPlayers = function(){
     var players = [];
     for( var x = 0, max = this.players.length; x < max; x++ ){
-        players.push( this.players[x].player )
+        if( this.players[x] !== undefined )
+            players.push( this.players[x].player )
     }
     return players;
 };
 
 AsteroidGame.Main.prototype.getClients = function(){
     return this.players;
+}
+
+AsteroidGame.Main.prototype.postPlayerFromClient = function( args ){
+    if( args !== undefined ){
+        if( this.players[args.id] !== undefined ){
+            var player = this.players[args.id].player;
+
+            player.loc = args.loc;
+            player.vel = args.vel;
+            player.assetRef = args.assetRef;
+        }
+    }
 }

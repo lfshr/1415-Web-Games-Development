@@ -38,7 +38,14 @@ AsteroidGame.Server.prototype.connect = function(ipAddress){
         //for(var x = 0, max = players.length; x < max; x++){
             //AsteroidGame.main.addPlayer(players[x]);
         //}
-    })
+    });
+
+    this.socket.on('player disconnect', function(disconnectId, reason){
+        if( AsteroidGame.main.players[disconnectId] !== undefined ){
+            AsteroidGame.main.players[disconnectId].sprite.destroy();
+            AsteroidGame.main.players[disconnectId] = undefined;
+        }
+    });
 };
 
 AsteroidGame.Server._update_player_locations_ = function(locations){
@@ -52,14 +59,12 @@ AsteroidGame.Server.prototype.addControlledPlayerToServer = function(player){
     console.log(player);
     var playerServe = {
         clientName: player.clientName,
-        loc: player.loc,
-        vel: player.vel,
+        loc: player.getLocation(),
+        vel: player.getVelocity(),
         assetRef: player.assetRef,
         id: player.id
     }
-    this.socket.emit('player connect', playerServe, function(){
-
-    });
+    this.socket.emit('player connect', playerServe)
 }
 
 AsteroidGame.Server.prototype.initPlayers = function(){
@@ -76,6 +81,7 @@ AsteroidGame.Server.prototype.initPlayers = function(){
         console.log("Received "+data.length+" players from server");
         for(var x = 0, max = data.length; x < max; x++){
             console.log("Adding Player to Stage");
+            console.log(data[x]);
             AsteroidGame.main.addPlayer(data[x]);
         }
     });
@@ -106,4 +112,15 @@ AsteroidGame.Server.prototype.onUpdatePlayerLocations = function(callback){
         this._onUpdatePlayerLocations = callback;
         console.log(this._onUpdatePlayerLocations);
     }
+}
+
+AsteroidGame.Server.prototype.postPlayerToServer = function(player){
+    var args = {
+        clientName: player.clientName,
+        id : player.id,
+        loc: player.getLocation(),
+        vel: player.getVelocity(),
+        assetRef: player.assetRef
+    }
+    this.socket.emit('post player', args);
 }
