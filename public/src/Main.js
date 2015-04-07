@@ -136,20 +136,26 @@ AsteroidGame.Main.prototype.create = function(){
         }
     })
         
+        
+    AsteroidGame.state = AsteroidGame.PLAYING;
 };
 
 AsteroidGame.Main.prototype.update = function(){
-    // use setTimeout in server as we don't want this running every time it can
-    AsteroidGame.deltaTime = (new Date().getTime() - AsteroidGame._previousTick) / 1000;
-    AsteroidGame._previousTick = new Date().getTime();
-
-    var main = AsteroidGame.main;
-    for( var i = 0; i < main.players.length; i++ ){
-        var player = main.players[i];
-        if( player !== undefined ){
-            player.update();
+    
+    if( AsteroidGame.state === AsteroidGame.PLAYING ){
+        // use setTimeout in server as we don't want this running every time it can
+        AsteroidGame.deltaTime = (new Date().getTime() - AsteroidGame._previousTick) / 1000;
+        AsteroidGame._previousTick = new Date().getTime();
+        
+        var main = AsteroidGame.main;
+        for( var i = 0; i < main.players.length; i++ ){
+            var player = main.players[i];
+            if( player !== undefined ){
+                player.update();
+            }
         }
     }
+    
 
 };
 

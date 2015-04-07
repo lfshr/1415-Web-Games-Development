@@ -45,7 +45,9 @@ AsteroidGame.Object.prototype.update = function(){
     }
 
     if( this.sprite === undefined ){
-        this.loadSprite();
+        console.error("No Sprite in player");
+        console.log(self);
+        AsteroidGame.state = AsteroidGame.PAUSED;
     }
 };
 
@@ -72,7 +74,12 @@ AsteroidGame.Object.prototype.create = function(args){
 AsteroidGame.Object.prototype.updateLocationFromServer = function(args){
     //console.log(args);
     if( args !== undefined ){
-        this.setLocation(args.loc.x, args.loc.y);
+        var timeModifier = 1 / (new Date().getTime() - args.time_stamp);
+        var newloc = {
+            x: args.loc.x + (args.vel.x * timeModifier),
+            y: args.loc.y + (args.vel.y * timeModifier)
+        }
+        this.setLocation(newloc.x, newloc.y);
         this.setVelocity(args.vel.x, args.vel.y);
     }
 

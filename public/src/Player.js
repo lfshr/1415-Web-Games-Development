@@ -3,7 +3,7 @@
 */
 
 
-var AsteroidGame = AsteroidGame;
+
 
 AsteroidGame.Player = function(args){
     // Inherit Object class

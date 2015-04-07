@@ -1,7 +1,7 @@
-
-AsteroidGame = {
+// Removed Require() statement.
+window.AsteroidGame = {
     _previousTick: 0,
-    deltaTime: 0.0,
+    deltaTime: 0,
     framesPerSecond: 30,
     // Main constants
     NOSTATE: 0,

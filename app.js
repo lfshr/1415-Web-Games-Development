@@ -94,7 +94,8 @@ function updatePlayer(socket){
     if( socket !== undefined ){
         setTimeout(updatePlayer, 1 / AsteroidGame.framesPerSecond, socket);
 
-        var locations = [];
+        var locations = [],
+            time = new Date().getTime();
 
         var players = main.getPlayers();
         for( var i = 0, max = players.length; i < max; i++ ){
@@ -102,7 +103,8 @@ function updatePlayer(socket){
                 locations.push({
                     id : players[i].id,
                     loc: players[i].loc,
-                    vel: players[i].vel
+                    vel: players[i].vel,
+                    time_stamp: time
                 });
             }
         }
