@@ -10,10 +10,11 @@ AsteroidGame.Point = function(x, y){
 
 // The main class constructor . Commonly known as "game" in other projects
 AsteroidGame.Main = function(args){
-    var game, // Phaser game class
-        _width = 800, //width of the phaser canvas
-        _height = 600, //height of the phaser canvas
-        _hidden = false //is the canvas hidden?
+    this.game = undefined; // Phaser game class
+    this._width = 800; //width of the phaser canvas
+    this._height = 600; //height of the phaser canvas
+    this._hidden = false; //is the canvas hidden?
+    this.cursors = undefined // Phaser input cursors
     this.players = [];
     this.asteroids = [];
     this.bullets = [];
@@ -30,9 +31,9 @@ AsteroidGame.Main = function(args){
 
     // Pass the arguments to the variables
     if( args !== undefined ){
-        _width = args.width || _width;
-        _height = args.height || _height;
-        _hidden = args.hidden || _hidden;
+        this._width = args.width || this._width;
+        this._height = args.height || this._height;
+        this._hidden = args.hidden || this._hidden;
     }
 
     // Call this function to start the game.
@@ -136,12 +137,18 @@ AsteroidGame.Main.prototype.create = function(){
         }
     })
         
-        
+    main.cursors = g.input.keyboard.createCursorKeys();
+    g.input.keyboard.addKeyCapture([ Phaser.Keyboard.SPACEBAR ]);
     AsteroidGame.state = AsteroidGame.PLAYING;
 };
 
 AsteroidGame.Main.prototype.update = function(){
     
+    var main = AsteroidGame.main,
+    	cursors = main.cursors,
+    	game = main.game,
+    	player = main.players[main.controlledPlayerIndex];
+
     if( AsteroidGame.state === AsteroidGame.PLAYING ){
         // use setTimeout in server as we don't want this running every time it can
         AsteroidGame.deltaTime = (new Date().getTime() - AsteroidGame._previousTick) / 1000;
@@ -154,6 +161,23 @@ AsteroidGame.Main.prototype.update = function(){
                 player.update();
             }
         }
+    }
+
+
+
+    if( cursors.up.isDown )
+    {
+    	player.accelerateForward();
+    }else{
+    	player.resetAcceleration();
+    }
+
+    if( cursors.right.isDown ){
+    	player.turnRight();
+    } else if ( cursors.left.isDown ){
+    	player.turnLeft();
+    } else {
+    	player.resetAngularVelocity();
     }
     
 

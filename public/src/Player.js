@@ -36,3 +36,25 @@ AsteroidGame.Player.prototype.getPlayerLiteral = function(){
 AsteroidGame.Player.prototype.setId = function(newid){
     this.id = newid;
 }
+
+
+AsteroidGame.Player.prototype.accelerateForward = function(){
+    console.log("Move up bitch");
+    this.game.physics.arcade.accelerationFromRotation(this.sprite.rotation, 50, this.sprite.body.acceleration);
+}
+
+AsteroidGame.Player.prototype.resetAcceleration = function(){
+    this.sprite.body.acceleration = new Phaser.Point();
+}
+
+AsteroidGame.Player.prototype.turnRight = function(){
+    this.sprite.body.angularVelocity = 300;
+}
+
+AsteroidGame.Player.prototype.turnLeft = function(){
+    this.sprite.body.angularVelocity = -300;
+}
+
+AsteroidGame.Player.prototype.resetAngularVelocity = function(){
+    this.sprite.body.angularVelocity = 0;
+}

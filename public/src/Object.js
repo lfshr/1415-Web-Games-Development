@@ -66,7 +66,11 @@ AsteroidGame.Object.prototype.getVelocity = function(){
 
 AsteroidGame.Object.prototype.create = function(args){
     if( args === null ){
-        console.error("Object.create called with null arguments")
+        try{
+            throw("Object.create called with null arguments")
+        }catch(e){
+
+        }
         return;
     }
 };
@@ -78,6 +82,12 @@ AsteroidGame.Object.prototype.updateLocationFromServer = function(args){
         var newloc = {
             x: args.loc.x + (args.vel.x * timeModifier),
             y: args.loc.y + (args.vel.y * timeModifier)
+        }
+        if( this.sprite.x - newloc.x > 10 || this.sprite.x - newloc.x < 10 ){
+            throw("Sprite has got a dramatic different location from server")
+        }
+        if( this.sprite.y - newloc.y > 10 || this.sprite.y - newloc.y < 10 ){
+            throw("Sprite has got a dramatic different location from server")
         }
         this.setLocation(newloc.x, newloc.y);
         this.setVelocity(args.vel.x, args.vel.y);
@@ -92,6 +102,7 @@ AsteroidGame.Object.prototype.loadSprite = function(name){
     if( this.game !== undefined ){
         this.sprite = this.game.add.sprite(0, 0, this.assetRef, 0, this.group);
         this.sprite.scale = new Phaser.Point(this.scale, this.scale);
+        this.sprite.anchor.set(0.5);
         this.game.physics.enable(this.sprite, this.game.physics.ARCADE);
     }
 }
