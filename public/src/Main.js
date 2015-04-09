@@ -115,27 +115,12 @@ AsteroidGame.Main.prototype.create = function(){
     main.server.initPlayers();
     //this.server.ipAddress = document.URL;
     main.server.onPlayerConnect(function(player){
-        if( player !== undefined ){
-            if( player.id !== AsteroidGame.main.controlledPlayerIndex || player.id === -1 ){
-                AsteroidGame.main.addPlayer(player);
-            }
-        }
+        
     });
 
     players[uniqueID] = player;
     main.server.addControlledPlayerToServer(player);
-    main.server.onUpdatePlayerLocations(function(playersFromServer){
-        var main = AsteroidGame.main;
-        //console.log(playersFromServer);
-        for( var i = 0, max = playersFromServer.length; i < max; i++ ){
-            var playeridx = playersFromServer[i].id;
-            if( playeridx !== main.controlledPlayerIndex ) {
-                if (main.players[playeridx] !== undefined) {
-                    main.players[playeridx].updateLocationFromServer(playersFromServer[i])
-                }
-            }
-        }
-    })
+    main.server.onUpdatePlayerLocations(main.updatePlayerLocations)
         
     main.cursors = g.input.keyboard.createCursorKeys();
     g.input.keyboard.addKeyCapture([ Phaser.Keyboard.SPACEBAR ]);
@@ -168,16 +153,20 @@ AsteroidGame.Main.prototype.update = function(){
     if( cursors.up.isDown )
     {
     	player.accelerateForward();
+        player.dirty = true;
     }else{
     	player.resetAcceleration();
     }
 
     if( cursors.right.isDown ){
     	player.turnRight();
+        player.dirty = true;
     } else if ( cursors.left.isDown ){
     	player.turnLeft();
+        player.dirty = true;
     } else {
     	player.resetAngularVelocity();
+        player.dirty = true;
     }
     
 
@@ -223,4 +212,28 @@ AsteroidGame.Main.prototype.addPlayer = function(args){
     player.setLocation(args.loc.x, args.loc.y);
     player.setVelocity(args.loc.x, args.loc.y);
     this.players[args.id] = player;
+}
+
+AsteroidGame.Main.prototype.playerConnect = function(player){
+    console.log("ADDING PLAYER "+player.id)
+	if( player !== undefined ){
+        if( player.id !== AsteroidGame.main.controlledPlayerIndex || player.id === -1 ){
+            AsteroidGame.main.addPlayer(player);
+        }
+    }
+}
+
+AsteroidGame.Main.prototype.updatePlayerLocations = function(playersFromServer){ // Listener for socket emit
+	var main = AsteroidGame.main;
+        //console.log(playersFromServer);
+        for( var i = 0, max = playersFromServer.length; i < max; i++ ){
+            var playeridx = playersFromServer[i].id;
+            if( playeridx !== main.controlledPlayerIndex ) {
+                if (main.players[playeridx] !== undefined) {
+                    //console.log("Updating Location");
+                    //console.log(main.players[playeridx])
+                    main.players[playeridx].updateLocationFromServer(playersFromServer[i])
+                }
+            }
+        }
 }

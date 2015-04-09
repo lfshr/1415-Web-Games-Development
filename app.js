@@ -92,6 +92,7 @@ io.on('connection', function(socket){
 
 function updatePlayer(socket){
     if( socket !== undefined ){
+        //console.log("Update");
         setTimeout(updatePlayer, 1 / AsteroidGame.framesPerSecond, socket);
 
         var locations = [],

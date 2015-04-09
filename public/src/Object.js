@@ -42,6 +42,7 @@ AsteroidGame.Object.prototype.move = function(x, y){
 AsteroidGame.Object.prototype.update = function(){
     if( this.dirty === true ){
         AsteroidGame.main.server.postPlayerToServer(this);
+        this.dirty = false;
     }
 
     if( this.sprite === undefined ){
@@ -78,16 +79,16 @@ AsteroidGame.Object.prototype.create = function(args){
 AsteroidGame.Object.prototype.updateLocationFromServer = function(args){
     //console.log(args);
     if( args !== undefined ){
-        var timeModifier = 1 / (new Date().getTime() - args.time_stamp);
+        var timeModifier = new Date().getTime() - args.time_stamp;
         var newloc = {
-            x: args.loc.x + (args.vel.x * timeModifier),
-            y: args.loc.y + (args.vel.y * timeModifier)
+            x: args.loc.x + (args.vel.x * (timeModifier / 1000)),
+            y: args.loc.y + (args.vel.y * (timeModifier / 1000))
         }
         if( this.sprite.x - newloc.x > 10 || this.sprite.x - newloc.x < 10 ){
-            throw("Sprite has got a dramatic different location from server")
+            //throw("Sprite has got a dramatic different location from server")
         }
         if( this.sprite.y - newloc.y > 10 || this.sprite.y - newloc.y < 10 ){
-            throw("Sprite has got a dramatic different location from server")
+            //throw("Sprite has got a dramatic different location from server")
         }
         this.setLocation(newloc.x, newloc.y);
         this.setVelocity(args.vel.x, args.vel.y);
@@ -103,6 +104,8 @@ AsteroidGame.Object.prototype.loadSprite = function(name){
         this.sprite = this.game.add.sprite(0, 0, this.assetRef, 0, this.group);
         this.sprite.scale = new Phaser.Point(this.scale, this.scale);
         this.sprite.anchor.set(0.5);
+        //this.sprite.body.drag.set(100);
+        //this.sprite.body.maxVelocity.set(200);
         this.game.physics.enable(this.sprite, this.game.physics.ARCADE);
     }
 }
