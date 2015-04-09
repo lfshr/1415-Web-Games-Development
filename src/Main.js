@@ -77,6 +77,8 @@ AsteroidGame.Main.prototype.postPlayerFromClient = function( args ){
 
             player.loc = args.loc;
             player.vel = args.vel;
+            player.angvel = args.angvel;
+            player.rot = args.rot;
             player.assetRef = args.assetRef;
         }
     }

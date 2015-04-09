@@ -18,8 +18,12 @@ AsteroidGame.Server.prototype.connect = function(ipAddress){
     this.socket.connect(ipAdd);
 
     this.socket.on('player connect', function(player){
+        console.log("Player connected: "+player.clientName)
         var onPlayerConnect = AsteroidGame.main.server._onPlayerConnect;
         if( player !== undefined ){
+            if( onPlayerConnect.length === 0 ){
+                throw("No handler for 'Player connect' socket event")
+            }
             for( var i = 0; i < onPlayerConnect.length; i++ ){
                 onPlayerConnect[i](player);
             }
@@ -60,6 +64,8 @@ AsteroidGame.Server.prototype.addControlledPlayerToServer = function(player){
     var playerServe = {
         clientName: player.clientName,
         loc: player.getLocation(),
+        rot: player.getRotation(),
+        angvel: player.getAngularVelocity(),
         vel: player.getVelocity(),
         assetRef: player.assetRef,
         id: player.id
@@ -104,6 +110,8 @@ AsteroidGame.Server.prototype.getUniquePlayerId = function(){
 AsteroidGame.Server.prototype.onPlayerConnect = function(callback){
     if( typeof callback === "function" ){
         this._onPlayerConnect.push(callback);
+    }else{
+        throw("typeof callback is "+typeof callback+". callback has to be typeof: function");
     }
 }
 
@@ -120,6 +128,8 @@ AsteroidGame.Server.prototype.postPlayerToServer = function(player){
         id : player.id,
         loc: player.getLocation(),
         vel: player.getVelocity(),
+        rot: player.getRotation(),
+        angvel: player.getAngularVelocity(),
         assetRef: player.assetRef
     }
     this.socket.emit('post player', args);

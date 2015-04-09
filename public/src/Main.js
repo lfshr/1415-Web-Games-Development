@@ -16,6 +16,7 @@ AsteroidGame.Main = function(args){
     this._hidden = false; //is the canvas hidden?
     this.cursors = undefined // Phaser input cursors
     this.players = [];
+    this.controlledPlayer = undefined; // Hook up to players[controlledplayerindex]
     this.asteroids = [];
     this.bullets = [];
     // Phaser Groups
@@ -112,13 +113,15 @@ AsteroidGame.Main.prototype.create = function(){
         size: new AsteroidGame.Point(5, 5)
     });
 
+    
+
     main.server.initPlayers();
     //this.server.ipAddress = document.URL;
-    main.server.onPlayerConnect(function(player){
-        
-    });
+    main.server.onPlayerConnect(main.playerConnect);
 
     players[uniqueID] = player;
+    main.controlledPlayer = players[uniqueID]
+
     main.server.addControlledPlayerToServer(player);
     main.server.onUpdatePlayerLocations(main.updatePlayerLocations)
         
@@ -132,7 +135,7 @@ AsteroidGame.Main.prototype.update = function(){
     var main = AsteroidGame.main,
     	cursors = main.cursors,
     	game = main.game,
-    	player = main.players[main.controlledPlayerIndex];
+    	player = main.controlledPlayer;
 
     if( AsteroidGame.state === AsteroidGame.PLAYING ){
         // use setTimeout in server as we don't want this running every time it can

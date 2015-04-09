@@ -76,6 +76,23 @@ AsteroidGame.Object.prototype.create = function(args){
     }
 };
 
+AsteroidGame.Object.prototype.getAngularVelocity = function(){
+    return this.sprite.body.angularVelocity;
+};
+
+AsteroidGame.Object.prototype.setAngularVelocity = function(angvel){
+    this.sprite.body.angularVelocity = angvel
+}
+
+AsteroidGame.Object.prototype.getRotation = function(){
+    return this.sprite.rotation;
+};
+
+AsteroidGame.Object.prototype.setRotation = function(rot){
+    this.sprite.rotation = rot;
+}
+
+
 AsteroidGame.Object.prototype.updateLocationFromServer = function(args){
     //console.log(args);
     if( args !== undefined ){
@@ -84,6 +101,8 @@ AsteroidGame.Object.prototype.updateLocationFromServer = function(args){
             x: args.loc.x + (args.vel.x * (timeModifier / 1000)),
             y: args.loc.y + (args.vel.y * (timeModifier / 1000))
         }
+
+        var newrot = args.rot + (args.angvel * (timeModifier / 1000));
         if( this.sprite.x - newloc.x > 10 || this.sprite.x - newloc.x < 10 ){
             //throw("Sprite has got a dramatic different location from server")
         }
@@ -92,6 +111,8 @@ AsteroidGame.Object.prototype.updateLocationFromServer = function(args){
         }
         this.setLocation(newloc.x, newloc.y);
         this.setVelocity(args.vel.x, args.vel.y);
+        //this.setAngularVelocity(args.angvel);
+        this.setRotation(newrot)
     }
 
     this.syncSprite();

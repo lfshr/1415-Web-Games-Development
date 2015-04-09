@@ -45,6 +45,8 @@ io.on('connection', function(socket){
                 id : player.id,
                 loc: player.loc,
                 vel: player.vel,
+                rot: player.rot,
+                angvel: player.angvel,
                 assetRef: player.assetRef
             });
         socket.playerId = player.id;
@@ -105,6 +107,8 @@ function updatePlayer(socket){
                     id : players[i].id,
                     loc: players[i].loc,
                     vel: players[i].vel,
+                    rot: players[i].rot,
+                    angvel: players[i].angvel,
                     time_stamp: time
                 });
             }
