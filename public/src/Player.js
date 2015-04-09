@@ -20,6 +20,29 @@ AsteroidGame.Player = function(args){
             this.loadSprite(args.assetRef);
         }
     }
+
+    this.accelerateForward = function(){
+        console.log("Move up bitch");
+        this.game.physics.arcade.accelerationFromRotation(this.sprite.rotation, 50, this.sprite.body.acceleration);
+    }
+
+    this.resetAcceleration = function(){
+        this.sprite.body.acceleration = new Phaser.Point();
+    }
+
+
+    this.turnRight = function(){
+        this.sprite.body.angularVelocity = 300;
+    }
+
+    this.turnLeft = function(){
+        this.sprite.body.angularVelocity = -300;
+    }
+
+    this.resetAngularVelocity = function(){
+        this.sprite.body.angularVelocity = 0;
+    }
+
 };
 
 var test = new AsteroidGame.Player();
@@ -38,23 +61,8 @@ AsteroidGame.Player.prototype.setId = function(newid){
 }
 
 
-AsteroidGame.Player.prototype.accelerateForward = function(){
-    console.log("Move up bitch");
-    this.game.physics.arcade.accelerationFromRotation(this.sprite.rotation, 50, this.sprite.body.acceleration);
+AsteroidGame.Player.accelerateForward = function(){
+    
 }
 
-AsteroidGame.Player.prototype.resetAcceleration = function(){
-    this.sprite.body.acceleration = new Phaser.Point();
-}
 
-AsteroidGame.Player.prototype.turnRight = function(){
-    this.sprite.body.angularVelocity = 300;
-}
-
-AsteroidGame.Player.prototype.turnLeft = function(){
-    this.sprite.body.angularVelocity = -300;
-}
-
-AsteroidGame.Player.prototype.resetAngularVelocity = function(){
-    this.sprite.body.angularVelocity = 0;
-}

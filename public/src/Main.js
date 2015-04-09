@@ -135,7 +135,7 @@ AsteroidGame.Main.prototype.update = function(){
     var main = AsteroidGame.main,
     	cursors = main.cursors,
     	game = main.game,
-    	player = main.controlledPlayer;
+    	player = main.players[AsteroidGame.main.controlledPlayerIndex-1];
 
     if( AsteroidGame.state === AsteroidGame.PLAYING ){
         // use setTimeout in server as we don't want this running every time it can
@@ -152,24 +152,24 @@ AsteroidGame.Main.prototype.update = function(){
     }
 
 
-
+    var p = main.players[main.controlledPlayerIndex]
     if( cursors.up.isDown )
     {
-    	player.accelerateForward();
-        player.dirty = true;
+    	p.accelerateForward();
+        p.dirty = true;
     }else{
-    	player.resetAcceleration();
+    	p.resetAcceleration();
     }
 
     if( cursors.right.isDown ){
-    	player.turnRight();
-        player.dirty = true;
+    	p.turnRight();
+        p.dirty = true;
     } else if ( cursors.left.isDown ){
-    	player.turnLeft();
-        player.dirty = true;
+    	p.turnLeft();
+        p.dirty = true;
     } else {
-    	player.resetAngularVelocity();
-        player.dirty = true;
+    	p.resetAngularVelocity();
+        p.dirty = true;
     }
     
 
