@@ -49,7 +49,9 @@ AsteroidGame.Object.prototype.move = function(x, y){
 AsteroidGame.Object.prototype.update = function(){
     this.loc.x += this.vel.x * AsteroidGame.deltaTime;
     this.loc.y += this.vel.y * AsteroidGame.deltaTime;
-    this.rot += this.angvel * AsteroidGame.deltaTime;
+    //TODO: Look in Phaser code and find out how the angle is calculated from angular velocity
+    // This makes no sense. I have tried everything. (This is a pathetic last attempt)
+    //this.rot += (this.angvel / 2) * AsteroidGame.deltaTime;
 };
 
 AsteroidGame.Object.prototype.syncSprite = function(){

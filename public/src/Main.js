@@ -58,8 +58,8 @@ AsteroidGame.Main = function(args){
 AsteroidGame.Main.prototype.preload = function(){
 
     var main = AsteroidGame.main;
-    main.game.load.image('player', 'assets/player.png');
-    main.game.load.image('enemy', 'assets/enemy.png');
+    main.game.load.image('player', 'assets/p1.png');
+    main.game.load.image('enemy', 'assets/p2.png');
 
     main.preloaded = true;
     console.log(main._gamepreloadcallbacks);
@@ -91,9 +91,11 @@ AsteroidGame.Main.prototype.create = function(){
 
     g.physics.startSystem(Phaser.Physics.ARCADE);
 
-    this.playerGroup = g.add.group();
-    asteroidGroup = g.add.group();
-    bulletGroup = g.add.group();
+    main.playerGroup = g.add.group();
+    main.playerGroup.enableBody = true;
+
+    main.asteroidGroup = g.add.group();
+    main.bulletGroup = g.add.group();
 
 
     main.server = new AsteroidGame.Server();
@@ -108,7 +110,7 @@ AsteroidGame.Main.prototype.create = function(){
         game: g,
         type: AsteroidGame.PLAYERTYPE,
         assetRef: 'player',
-        assetGroup: this.playerGroup,
+        assetGroup: main.playerGroup,
         loc: new AsteroidGame.Point(10, 10),
         size: new AsteroidGame.Point(5, 5)
     });
@@ -149,6 +151,16 @@ AsteroidGame.Main.prototype.update = function(){
                 player.update();
             }
         }
+
+        this.game.physics.arcade.collide(main.playerGroup, main.playerGroup);
+
+        /*for( var i = 0, max = main.players.length; i < max; i = i + 1 ){
+            for( var x = i + 1; x < max; x++ ){
+                if( main.players[i] !== undefined && main.players[x] !== undefined ){
+                    this.game.physics.arcade.collide(main.players[i], main.players[x]);
+                }
+            }
+        }*/
     }
 
 
@@ -175,9 +187,23 @@ AsteroidGame.Main.prototype.update = function(){
 
 };
 
+AsteroidGame.Main.prototype.render = function(){
+    var main = AsteroidGame.main,
+    p = main.players[main.controlledPlayerIndex];
+
+    if( p !== undefined )
+        if( p.sprite !== undefined ){
+            //main.game.debug.body(p.sprite)
+            //main.game.debug.bodyInfo(p.sprite, 30, 30, "rgb(255,255,255)")
+            main.game.debug.spriteInfo(p.sprite, 30, 30);
+        }
+}
+
 AsteroidGame.Main.prototype.start = function(){
     // Define the phaser game
-    this.game = new Phaser.Game(this._width, this._height, this._hidden ? Phaser.HEADLESS : Phaser.AUTO, '', {preload: this.preload, create: this.create, update: this.update})
+    var displayType = this._hidden ? Phaser.HEADLESS : Phaser.AUTO;
+
+    this.game = new Phaser.Game(this._width, this._height, displayType, '', {preload: this.preload, create: this.create, update: this.update, render: this.render})
     AsteroidGame._previousTick = new Date().getTime;
 };
 

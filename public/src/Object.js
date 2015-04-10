@@ -111,8 +111,8 @@ AsteroidGame.Object.prototype.updateLocationFromServer = function(args){
         }
         this.setLocation(newloc.x, newloc.y);
         this.setVelocity(args.vel.x, args.vel.y);
-        //this.setAngularVelocity(args.angvel);
-        this.setRotation(newrot)
+        this.setAngularVelocity(args.angvel);
+        this.setRotation(args.rot);
     }
 
     this.syncSprite();
@@ -121,12 +121,19 @@ AsteroidGame.Object.prototype.updateLocationFromServer = function(args){
 AsteroidGame.Object.prototype.loadSprite = function(name){
     //if( this.group !== undefined ){
         //this.sprite = this.group.create(this.loc.x, this.loc.y, name || this.assetRef, 0, this.group);
+
     if( this.game !== undefined ){
-        this.sprite = this.game.add.sprite(0, 0, this.assetRef, 0, this.group);
+        this.sprite = this.game.add.sprite(100, 100, this.assetRef, 0, this.group);
         this.sprite.scale = new Phaser.Point(this.scale, this.scale);
         this.sprite.anchor.set(0.5);
-        //this.sprite.body.drag.set(100);
-        //this.sprite.body.maxVelocity.set(200);
         this.game.physics.enable(this.sprite, this.game.physics.ARCADE);
+        this.sprite.enableBody = true;
+        this.sprite.body.drag.set(10);
+        this.sprite.body.maxVelocity.set(200);
+        this.sprite.body.bounce = new Phaser.Point(0.5, 0.5);
+
+        if( this.group !== undefined ){
+            this.group.add(this.sprite);
+        }
     }
 }
