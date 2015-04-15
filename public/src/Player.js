@@ -10,12 +10,12 @@ AsteroidGame.Player = function(args){
     AsteroidGame.Object.apply(this, [args]);
     this.clientName = "John Doe";
     this.id = -1;
+    fireBulletTime = this.game !== undefined ? this.game.time.now | 0;
 
     if( args !== undefined ){
         console.log(this.game);
         this.clientName = args.clientName || clientName;
         this.id = args.id || this.id
-
         if( args.assetRef ){
             this.loadSprite(args.assetRef);
         }
