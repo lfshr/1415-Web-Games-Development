@@ -97,6 +97,7 @@ AsteroidGame.Object.prototype.updateLocationFromServer = function(args){
     //console.log(args);
     if( args !== undefined ){
         var timeModifier = new Date().getTime() - args.time_stamp;
+        args.vel = args.vel || {x:0, y:0}
         var newloc = {
             x: args.loc.x + (args.vel.x * (timeModifier / 1000)),
             y: args.loc.y + (args.vel.y * (timeModifier / 1000))

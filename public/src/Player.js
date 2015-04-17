@@ -30,7 +30,7 @@ AsteroidGame.Player = function(args){
         
         if( this.game !== undefined ){
             this.bulletGroup = this.game.add.group();
-            this.bulletGroup.createMultiple(40, "bullets");
+            //this.bulletGroup.createMultiple(40, "bullets");
         }
     }
 
