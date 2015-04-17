@@ -128,7 +128,6 @@ AsteroidGame.Object.prototype.loadSprite = function(name){
         this.sprite.anchor.set(0.5);
         this.game.physics.enable(this.sprite, this.game.physics.ARCADE);
         this.sprite.enableBody = true;
-        this.sprite.body.drag.set(10);
         this.sprite.body.maxVelocity.set(200);
         this.sprite.body.bounce = new Phaser.Point(0.5, 0.5);
 

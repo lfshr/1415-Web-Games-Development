@@ -93,9 +93,9 @@ AsteroidGame.Main.prototype.create = function(){
 
     main.playerGroup = g.add.group();
     main.playerGroup.enableBody = true;
+    main.playerGroup.physicsBodyType = Phaser.Physics.ARCADE;
 
     main.asteroidGroup = g.add.group();
-    main.bulletGroup = g.add.group();
 
 
     main.server = new AsteroidGame.Server();
@@ -231,6 +231,7 @@ AsteroidGame.Main.prototype.addPlayer = function(args){
     args.group = main.playerGroup || this.game.add.group();
     args.type = AsteroidGame.PLAYERTYPE;
     args.size = new AsteroidGame.Point(5, 5);
+    args.bulletGroup = main.bulletGroup;
     console.log("adding player:");
     console.log(args);
     var player = new AsteroidGame.Player(args);
@@ -241,6 +242,7 @@ AsteroidGame.Main.prototype.addPlayer = function(args){
     player.setLocation(args.loc.x, args.loc.y);
     player.setVelocity(args.loc.x, args.loc.y);
     this.players[args.id] = player;
+    this.bullets[args.id] = [64]; // Preload 64
 }
 
 AsteroidGame.Main.prototype.playerConnect = function(player){
